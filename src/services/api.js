@@ -16,7 +16,7 @@ import axios from 'axios'
 class API {
   constructor(token = null) {
     this.api = axios.create({
-      baseURL: 'http://localhost:3333',
+      baseURL: 'https://2-server-example.vauxgomes.repl.co',
     })
 
     this.token(token)
@@ -38,6 +38,15 @@ class API {
     const response = await this.api.get(`/sys`)
     return response.data
   }
+
+  /*Login */
+  async login(username, password) {
+    const response = await this.api.post('/login', {username, password})
+    return response.data
+  }
+
+
+
 }
 
 export default new API()

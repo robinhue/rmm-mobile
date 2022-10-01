@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,29 +10,44 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import Menu from '../../components/Menu'
+import MenuModal from '../../components/MenuModal'
 
 import { color, font, space } from '../../styles'
 
-export default function MenusScreen() {
+export default function MenusScreen(navigation, route) {
+  const [modalVisible, setModalVisible] = useState(true)
+  const [menus, setMenus] = useState([])
+
+  function addMenu() {
+    setMenus(prev => [menus, ...menus])
+  }
+
   return (
     <View style={styles.container}>
       {/* Título */}
       <View style={styles.header}>
         <Text style={styles.title}>Cardápios</Text>
 
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => setModalVisible(true)}          
+        >
           <Icon name="plus" size={font.size.xl} color={color.white} />
         </TouchableOpacity>
       </View>
 
       {/* Entradas */}
       <ScrollView>
-        <Menu menu={{ name: 'Entrada', size: 3 }} />
-        <Menu menu={{ name: 'Clássico', size: 5 }} />
-        <Menu menu={{ name: 'Especiais', size: 4 }} />
-        <Menu menu={{ name: 'Bebidas', size: 8 }} />
-        <Menu menu={{ name: 'Sobremesas', size: 4 }} />
+        {/* <Menu menu={{ name: 'Entrada', size: 3 }} /> */}
+        {menus.map((menu, key) => 
+          <Menu menu={menu}/>)}
       </ScrollView>
+
+      <MenuModal
+        visible={modalVisible}
+        hide={() => setModalVisible(false)}
+        addMenu={addMenu}
+      />
     </View>
   )
 }
